@@ -19,4 +19,4 @@ Route::get('/', function () {
 });
 
 Route::resource('modules', ModuleController::class)
-    ->only('index');
+    ->only(['index', 'show']);
