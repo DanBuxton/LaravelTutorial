@@ -14,8 +14,8 @@
 
             <li>
                 {{ \Carbon\Carbon::parse($tutorial->time_start)->format('l') }}'s from
-                {{ \Carbon\Carbon::parse($tutorial->time_start)->format('Y:i') }} to
-                {{ \Carbon\Carbon::parse($tutorial->time_end)->format('Y:i') }} in
+                {{ \Carbon\Carbon::parse($tutorial->time_start)->format('H:i') }} to
+                {{ \Carbon\Carbon::parse($tutorial->time_end)->format('H:i') }} in
                 {{ $tutorial->room }} with
                 {{ implode( ' | ', $tutorial->tutors->map( function ($t) { return $t->name; })->toArray()) }}
             </li>
