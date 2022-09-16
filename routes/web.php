@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ModuleController;
+use App\Http\Controllers\ModuleTutorialController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -19,7 +22,14 @@ Route::get('/', function () {
 });
 
 Route::resource('modules', ModuleController::class)
-    ->only(['index', 'show']);
+    ->only(['index', 'show', 'create', 'store']);
+
+Route::resource('modules.tutorials', ModuleTutorialController::class)
+    ->only([
+        'create',
+        'store'
+    ]);
+
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');

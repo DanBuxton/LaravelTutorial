@@ -18,6 +18,7 @@ class ModulePolicy
      */
     public function viewAny(User $user)
     {
+        return $this->isAdmin($user);
     }
 
     /**
@@ -29,7 +30,7 @@ class ModulePolicy
      */
     public function view(User $user, Module $module)
     {
-        return $user->modules()->find($module->id) ? true : false;
+        return $this->isAdmin($user) || $user->modules()->find($module->id) ? true : false;
         //or
         // return $user->modules()->find($module)
         //     ? \Illuminate\Auth\Access\Response::allow()
@@ -44,6 +45,7 @@ class ModulePolicy
      */
     public function create(User $user)
     {
+        return $this->isAdmin($user);
     }
 
     /**
@@ -89,5 +91,10 @@ class ModulePolicy
      */
     public function forceDelete(User $user, Module $module)
     {
+    }
+
+    private function isAdmin(User $user): bool
+    {
+        return $user->role->role === 'admin';
     }
 }

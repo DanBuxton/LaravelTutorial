@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Module;
+use App\Models\Tutor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 
 class ModuleController extends Controller
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->middleware('auth');
     }
 
@@ -20,7 +22,11 @@ class ModuleController extends Controller
      */
     public function index()
     {
-        return view('modules.index', ['modules' => Auth::user()->modules]);
+        $modules = Gate::allows('viewAny', Module::class)
+            ? Module::all()
+            : Auth::user()->modules;
+
+        return view('modules.index', compact('modules'));
     }
 
     /**
@@ -30,6 +36,9 @@ class ModuleController extends Controller
      */
     public function create()
     {
+        Gate::authorize('create', Module::class);
+
+        return view('modules.create', ['tutors' => Tutor::all()]);
     }
 
     /**
@@ -40,6 +49,17 @@ class ModuleController extends Controller
      */
     public function store(Request $request)
     {
+        Gate::authorize('create', Module::class);
+        
+        $validatedData = $request->validate([
+            'id' => ['required', 'unique:modules', 'max:15'],
+            'name' => ['required', 'max:50'],
+            'lead_tutor_id' => ['required', 'exists:tutors,id', 'max:5']
+        ]);
+ 
+        Module::create($validatedData);
+ 
+        return redirect()->route('modules.index');
     }
 
     /**
@@ -52,7 +72,7 @@ class ModuleController extends Controller
     {
         Gate::authorize('view', $module);
 
-        return view ('modules.show', compact('module'));
+        return view('modules.show', compact('module'));
     }
 
     /**

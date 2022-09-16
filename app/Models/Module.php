@@ -8,6 +8,10 @@ class Module extends Model
 {
     public $incrementing = false;
 
+    protected $fillable = [
+        'id', 'name', 'lead_tutor_id'
+    ];
+
     public function leader()
     {
         return $this->belongsTo(Tutor::class, 'lead_tutor_id');
