@@ -10,7 +10,7 @@
         @foreach($modules as $module)
 
             <li>
-                <a href="{{ route('modules.show', $module->id) }}">{{ $module->id }}: {{ $module->name }}</a>
+                <a href="{{ route('modules.show', $module) }}">{{ $module->id }}: {{ $module->name }}</a>
             </li>
 
         @endforeach

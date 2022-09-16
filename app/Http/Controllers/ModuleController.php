@@ -4,9 +4,15 @@ namespace App\Http\Controllers;
 
 use App\Models\Module;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class ModuleController extends Controller
 {
+    public function __construct() {
+        $this->middleware('auth');
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -14,13 +20,7 @@ class ModuleController extends Controller
      */
     public function index()
     {
-        $modules = Module::all();
-
-        return view ('modules.index', compact('modules'));
-
-        // or
-
-        // return view('modules.index', ['modules' => Module::all()]);
+        return view('modules.index', ['modules' => Auth::user()->modules]);
     }
 
     /**
@@ -50,6 +50,8 @@ class ModuleController extends Controller
      */
     public function show(Module $module)
     {
+        Gate::authorize('view', $module);
+
         return view ('modules.show', compact('module'));
     }
 
